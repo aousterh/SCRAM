@@ -1,0 +1,8 @@
+./org/haggle/Attribute.java
+./org/haggle/DataObject.java
+./org/haggle/EventHandler.java
+./org/haggle/Handle.java
+./org/haggle/Interface.java
+./org/haggle/LaunchCallback.java
+./org/haggle/Node.java
+./org/haggle/TestApp.java

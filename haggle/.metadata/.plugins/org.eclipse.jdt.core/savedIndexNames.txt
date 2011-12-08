@@ -1,0 +1,4 @@
+INDEX VERSION 1.126+/Users/Amy/Documents/Junior_Year/COS_397/Haggle_stuff/checked_out/haggle/.metadata/.plugins/org.eclipse.jdt.core
+552063466.index
+4231652244.index
+238284491.index

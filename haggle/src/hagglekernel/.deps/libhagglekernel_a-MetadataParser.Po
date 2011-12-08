@@ -1,0 +1,2 @@
+libhagglekernel_a-MetadataParser.o libhagglekernel_a-MetadataParser.o:  \
+ MetadataParser.cpp

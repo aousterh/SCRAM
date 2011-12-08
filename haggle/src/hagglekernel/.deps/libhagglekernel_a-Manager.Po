@@ -1,0 +1,402 @@
+libhagglekernel_a-Manager.o libhagglekernel_a-Manager.o: Manager.cpp \
+  Manager.h ../../src/libcpphaggle/include/libcpphaggle/Platform.h \
+  ../../src/libcpphaggle/include/libcpphaggle/PlatformDetect.h \
+  /usr/include/unistd.h /usr/include/_types.h /usr/include/sys/_types.h \
+  /usr/include/sys/cdefs.h /usr/include/sys/_symbol_aliasing.h \
+  /usr/include/sys/_posix_availability.h /usr/include/machine/_types.h \
+  /usr/include/i386/_types.h /usr/include/sys/unistd.h \
+  /usr/include/Availability.h /usr/include/AvailabilityInternal.h \
+  /usr/include/sys/select.h /usr/include/sys/appleapiopts.h \
+  /usr/include/sys/_structs.h /usr/include/sys/_select.h \
+  /usr/include/sys/types.h /usr/include/machine/types.h \
+  /usr/include/i386/types.h /usr/include/i386/_types.h \
+  /usr/include/machine/endian.h /usr/include/i386/endian.h \
+  /usr/include/sys/_endian.h /usr/include/libkern/_OSByteOrder.h \
+  /usr/include/libkern/i386/_OSByteOrder.h /usr/include/sys/socket.h \
+  /usr/include/machine/_param.h /usr/include/i386/_param.h \
+  /usr/include/sys/un.h /usr/include/arpa/inet.h /usr/include/stdint.h \
+  /usr/include/netinet/in.h /usr/include/netinet6/in6.h \
+  /usr/include/string.h /usr/include/strings.h /usr/include/netinet/tcp.h \
+  /usr/include/sys/time.h /usr/include/time.h /usr/include/_structs.h \
+  /usr/include/netdb.h /usr/include/signal.h /usr/include/sys/signal.h \
+  /usr/include/machine/signal.h /usr/include/i386/signal.h \
+  /usr/include/i386/_structs.h /usr/include/machine/_structs.h \
+  /usr/include/mach/i386/_structs.h /usr/include/errno.h \
+  /usr/include/sys/errno.h \
+  ../../src/libcpphaggle/include/libcpphaggle/String.h \
+  /usr/include/stdlib.h /usr/include/sys/wait.h \
+  /usr/include/sys/resource.h /usr/include/alloca.h \
+  ../../src/libcpphaggle/include/libcpphaggle/Watch.h \
+  ../../src/utils/haggleutils.h ../../src/utils/utils.h \
+  ../../src/utils/prng.h /usr/include/stdio.h /usr/include/net/ethernet.h \
+  ../../src/utils/bloomfilter.h ../../src/utils/counting_bloomfilter.h \
+  ../../src/utils/base64.h \
+  /usr/llvm-gcc-4.2/bin/../lib/gcc/i686-apple-darwin11/4.2.1/include/stddef.h \
+  /usr/llvm-gcc-4.2/bin/../lib/gcc/i686-apple-darwin11/4.2.1/include/stdbool.h \
+  ../../src/utils/thread.h \
+  ../../src/libcpphaggle/include/libcpphaggle/Platform.h \
+  ../../src/libcpphaggle/include/libcpphaggle/Timeval.h \
+  ../../src/libcpphaggle/include/libcpphaggle/String.h \
+  ../../src/libcpphaggle/include/libcpphaggle/Signal.h \
+  ../../src/libcpphaggle/include/libcpphaggle/Mutex.h \
+  /usr/include/pthread.h /usr/include/pthread_impl.h /usr/include/sched.h \
+  Event.h ../../src/libcpphaggle/include/libcpphaggle/Heap.h \
+  ../../src/libcpphaggle/include/libcpphaggle/Timeval.h DataObject.h \
+  ../../src/libcpphaggle/include/libcpphaggle/Reference.h \
+  ../../src/libcpphaggle/include/libcpphaggle/Pair.h \
+  ../../src/libcpphaggle/include/libcpphaggle/List.h \
+  ../../src/libcpphaggle/include/libcpphaggle/HashMap.h \
+  /usr/llvm-gcc-4.2/bin/../lib/gcc/i686-apple-darwin11/4.2.1/include/limits.h \
+  /usr/llvm-gcc-4.2/bin/../lib/gcc/i686-apple-darwin11/4.2.1/include/syslimits.h \
+  /Developer/usr/llvm-gcc-4.2/lib/gcc/i686-apple-darwin11/4.2.1/include/limits.h \
+  /Developer/usr/llvm-gcc-4.2/lib/gcc/i686-apple-darwin11/4.2.1/include/syslimits.h \
+  /usr/include/limits.h /usr/include/machine/limits.h \
+  /usr/include/i386/limits.h /usr/include/i386/_limits.h \
+  /usr/include/sys/syslimits.h Trace.h \
+  ../../src/libcpphaggle/include/libcpphaggle/Mutex.h Utility.h \
+  Interface.h ../../src/libcpphaggle/include/libcpphaggle/Thread.h \
+  ../../src/libcpphaggle/include/libcpphaggle/Map.h \
+  ../../src/libcpphaggle/include/libcpphaggle/Pair.h \
+  ../../src/libcpphaggle/include/libcpphaggle/Exception.h \
+  ../../src/libcpphaggle/include/libcpphaggle/Condition.h Debug.h \
+  Address.h ../../src/libcpphaggle/include/libcpphaggle/List.h Metadata.h \
+  ../../src/libcpphaggle/include/libcpphaggle/HashMap.h \
+  ../../src/libcpphaggle/include/libcpphaggle/Map.h \
+  /usr/include/openssl/sha.h /usr/include/AvailabilityMacros.h \
+  /usr/include/openssl/e_os2.h /usr/include/openssl/opensslconf.h Node.h \
+  Attribute.h Bloomfilter.h Policy.h MetadataParser.h HaggleKernel.h \
+  EventQueue.h /usr/include/fcntl.h /usr/include/sys/fcntl.h DataStore.h \
+  Filter.h RepositoryEntry.h SQLDataStore.h \
+  /usr/include/libxml2/libxml/parser.h \
+  /usr/llvm-gcc-4.2/bin/../lib/gcc/i686-apple-darwin11/4.2.1/include/stdarg.h \
+  /usr/include/libxml2/libxml/xmlversion.h \
+  /usr/include/libxml2/libxml/xmlexports.h \
+  /usr/include/libxml2/libxml/tree.h \
+  /usr/include/libxml2/libxml/xmlstring.h \
+  /usr/include/libxml2/libxml/xmlregexp.h \
+  /usr/include/libxml2/libxml/dict.h /usr/include/libxml2/libxml/hash.h \
+  /usr/include/libxml2/libxml/valid.h \
+  /usr/include/libxml2/libxml/xmlerror.h \
+  /usr/include/libxml2/libxml/list.h \
+  /usr/include/libxml2/libxml/xmlautomata.h \
+  /usr/include/libxml2/libxml/entities.h \
+  /usr/include/libxml2/libxml/encoding.h \
+  /usr/include/libxml2/libxml/xmlIO.h \
+  /usr/include/libxml2/libxml/globals.h /usr/include/libxml2/libxml/SAX.h \
+  /usr/include/libxml2/libxml/xlink.h /usr/include/libxml2/libxml/SAX2.h \
+  /usr/include/libxml2/libxml/xmlmemory.h \
+  /usr/include/libxml2/libxml/threads.h /usr/include/sqlite3.h \
+  NodeStore.h InterfaceStore.h ConnectivityInterfacePolicy.h \
+  ManagerModule.h Queue.h \
+  ../../src/libcpphaggle/include/libcpphaggle/GenericQueue.h \
+  ../../src/libcpphaggle/include/libcpphaggle/Signal.h
+
+Manager.h:
+
+../../src/libcpphaggle/include/libcpphaggle/Platform.h:
+
+../../src/libcpphaggle/include/libcpphaggle/PlatformDetect.h:
+
+/usr/include/unistd.h:
+
+/usr/include/_types.h:
+
+/usr/include/sys/_types.h:
+
+/usr/include/sys/cdefs.h:
+
+/usr/include/sys/_symbol_aliasing.h:
+
+/usr/include/sys/_posix_availability.h:
+
+/usr/include/machine/_types.h:
+
+/usr/include/i386/_types.h:
+
+/usr/include/sys/unistd.h:
+
+/usr/include/Availability.h:
+
+/usr/include/AvailabilityInternal.h:
+
+/usr/include/sys/select.h:
+
+/usr/include/sys/appleapiopts.h:
+
+/usr/include/sys/_structs.h:
+
+/usr/include/sys/_select.h:
+
+/usr/include/sys/types.h:
+
+/usr/include/machine/types.h:
+
+/usr/include/i386/types.h:
+
+/usr/include/i386/_types.h:
+
+/usr/include/machine/endian.h:
+
+/usr/include/i386/endian.h:
+
+/usr/include/sys/_endian.h:
+
+/usr/include/libkern/_OSByteOrder.h:
+
+/usr/include/libkern/i386/_OSByteOrder.h:
+
+/usr/include/sys/socket.h:
+
+/usr/include/machine/_param.h:
+
+/usr/include/i386/_param.h:
+
+/usr/include/sys/un.h:
+
+/usr/include/arpa/inet.h:
+
+/usr/include/stdint.h:
+
+/usr/include/netinet/in.h:
+
+/usr/include/netinet6/in6.h:
+
+/usr/include/string.h:
+
+/usr/include/strings.h:
+
+/usr/include/netinet/tcp.h:
+
+/usr/include/sys/time.h:
+
+/usr/include/time.h:
+
+/usr/include/_structs.h:
+
+/usr/include/netdb.h:
+
+/usr/include/signal.h:
+
+/usr/include/sys/signal.h:
+
+/usr/include/machine/signal.h:
+
+/usr/include/i386/signal.h:
+
+/usr/include/i386/_structs.h:
+
+/usr/include/machine/_structs.h:
+
+/usr/include/mach/i386/_structs.h:
+
+/usr/include/errno.h:
+
+/usr/include/sys/errno.h:
+
+../../src/libcpphaggle/include/libcpphaggle/String.h:
+
+/usr/include/stdlib.h:
+
+/usr/include/sys/wait.h:
+
+/usr/include/sys/resource.h:
+
+/usr/include/alloca.h:
+
+../../src/libcpphaggle/include/libcpphaggle/Watch.h:
+
+../../src/utils/haggleutils.h:
+
+../../src/utils/utils.h:
+
+../../src/utils/prng.h:
+
+/usr/include/stdio.h:
+
+/usr/include/net/ethernet.h:
+
+../../src/utils/bloomfilter.h:
+
+../../src/utils/counting_bloomfilter.h:
+
+../../src/utils/base64.h:
+
+/usr/llvm-gcc-4.2/bin/../lib/gcc/i686-apple-darwin11/4.2.1/include/stddef.h:
+
+/usr/llvm-gcc-4.2/bin/../lib/gcc/i686-apple-darwin11/4.2.1/include/stdbool.h:
+
+../../src/utils/thread.h:
+
+../../src/libcpphaggle/include/libcpphaggle/Platform.h:
+
+../../src/libcpphaggle/include/libcpphaggle/Timeval.h:
+
+../../src/libcpphaggle/include/libcpphaggle/String.h:
+
+../../src/libcpphaggle/include/libcpphaggle/Signal.h:
+
+../../src/libcpphaggle/include/libcpphaggle/Mutex.h:
+
+/usr/include/pthread.h:
+
+/usr/include/pthread_impl.h:
+
+/usr/include/sched.h:
+
+Event.h:
+
+../../src/libcpphaggle/include/libcpphaggle/Heap.h:
+
+../../src/libcpphaggle/include/libcpphaggle/Timeval.h:
+
+DataObject.h:
+
+../../src/libcpphaggle/include/libcpphaggle/Reference.h:
+
+../../src/libcpphaggle/include/libcpphaggle/Pair.h:
+
+../../src/libcpphaggle/include/libcpphaggle/List.h:
+
+../../src/libcpphaggle/include/libcpphaggle/HashMap.h:
+
+/usr/llvm-gcc-4.2/bin/../lib/gcc/i686-apple-darwin11/4.2.1/include/limits.h:
+
+/usr/llvm-gcc-4.2/bin/../lib/gcc/i686-apple-darwin11/4.2.1/include/syslimits.h:
+
+/Developer/usr/llvm-gcc-4.2/lib/gcc/i686-apple-darwin11/4.2.1/include/limits.h:
+
+/Developer/usr/llvm-gcc-4.2/lib/gcc/i686-apple-darwin11/4.2.1/include/syslimits.h:
+
+/usr/include/limits.h:
+
+/usr/include/machine/limits.h:
+
+/usr/include/i386/limits.h:
+
+/usr/include/i386/_limits.h:
+
+/usr/include/sys/syslimits.h:
+
+Trace.h:
+
+../../src/libcpphaggle/include/libcpphaggle/Mutex.h:
+
+Utility.h:
+
+Interface.h:
+
+../../src/libcpphaggle/include/libcpphaggle/Thread.h:
+
+../../src/libcpphaggle/include/libcpphaggle/Map.h:
+
+../../src/libcpphaggle/include/libcpphaggle/Pair.h:
+
+../../src/libcpphaggle/include/libcpphaggle/Exception.h:
+
+../../src/libcpphaggle/include/libcpphaggle/Condition.h:
+
+Debug.h:
+
+Address.h:
+
+../../src/libcpphaggle/include/libcpphaggle/List.h:
+
+Metadata.h:
+
+../../src/libcpphaggle/include/libcpphaggle/HashMap.h:
+
+../../src/libcpphaggle/include/libcpphaggle/Map.h:
+
+/usr/include/openssl/sha.h:
+
+/usr/include/AvailabilityMacros.h:
+
+/usr/include/openssl/e_os2.h:
+
+/usr/include/openssl/opensslconf.h:
+
+Node.h:
+
+Attribute.h:
+
+Bloomfilter.h:
+
+Policy.h:
+
+MetadataParser.h:
+
+HaggleKernel.h:
+
+EventQueue.h:
+
+/usr/include/fcntl.h:
+
+/usr/include/sys/fcntl.h:
+
+DataStore.h:
+
+Filter.h:
+
+RepositoryEntry.h:
+
+SQLDataStore.h:
+
+/usr/include/libxml2/libxml/parser.h:
+
+/usr/llvm-gcc-4.2/bin/../lib/gcc/i686-apple-darwin11/4.2.1/include/stdarg.h:
+
+/usr/include/libxml2/libxml/xmlversion.h:
+
+/usr/include/libxml2/libxml/xmlexports.h:
+
+/usr/include/libxml2/libxml/tree.h:
+
+/usr/include/libxml2/libxml/xmlstring.h:
+
+/usr/include/libxml2/libxml/xmlregexp.h:
+
+/usr/include/libxml2/libxml/dict.h:
+
+/usr/include/libxml2/libxml/hash.h:
+
+/usr/include/libxml2/libxml/valid.h:
+
+/usr/include/libxml2/libxml/xmlerror.h:
+
+/usr/include/libxml2/libxml/list.h:
+
+/usr/include/libxml2/libxml/xmlautomata.h:
+
+/usr/include/libxml2/libxml/entities.h:
+
+/usr/include/libxml2/libxml/encoding.h:
+
+/usr/include/libxml2/libxml/xmlIO.h:
+
+/usr/include/libxml2/libxml/globals.h:
+
+/usr/include/libxml2/libxml/SAX.h:
+
+/usr/include/libxml2/libxml/xlink.h:
+
+/usr/include/libxml2/libxml/SAX2.h:
+
+/usr/include/libxml2/libxml/xmlmemory.h:
+
+/usr/include/libxml2/libxml/threads.h:
+
+/usr/include/sqlite3.h:
+
+NodeStore.h:
+
+InterfaceStore.h:
+
+ConnectivityInterfacePolicy.h:
+
+ManagerModule.h:
+
+Queue.h:
+
+../../src/libcpphaggle/include/libcpphaggle/GenericQueue.h:
+
+../../src/libcpphaggle/include/libcpphaggle/Signal.h:

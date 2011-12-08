@@ -1,0 +1,2 @@
+INDEX VERSION 1.126+/Users/Amy/Documents/Junior_Year/COS_397/Haggle_stuff/checked_out/haggle/android/.metadata/.plugins/org.eclipse.jdt.core
+2568185754.index

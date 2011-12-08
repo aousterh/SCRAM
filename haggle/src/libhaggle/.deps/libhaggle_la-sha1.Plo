@@ -1,0 +1,8 @@
+libhaggle_la-sha1.lo libhaggle_la-sha1.o: sha1.c sha1.h sha1_private.h \
+  /usr/include/stdint.h
+
+sha1.h:
+
+sha1_private.h:
+
+/usr/include/stdint.h:

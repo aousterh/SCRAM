@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section name="Workbench">
+	<item value="0" key="org.eclipse.egit.ui.internal.clone.GitSelectWizardPageWizardSel"/>
+	<item value="true" key="CommitDialog.showUntracked"/>
+	<list key="CommitDialog.authorValues">
+		<item value="Amy Ousterhout &lt;aousterh@princeton.edu&gt;"/>
+	</list>
+	<list key="CommitDialog.committerValues">
+		<item value="Amy Ousterhout &lt;aousterh@princeton.edu&gt;"/>
+	</list>
+	<section name="GitCommitMessageComponent">
+	</section>
+</section>
