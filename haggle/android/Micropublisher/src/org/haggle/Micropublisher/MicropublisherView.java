@@ -1,5 +1,9 @@
 package org.haggle.Micropublisher;
 
+import java.security.KeyPair;
+import java.security.PrivateKey;
+import java.security.PublicKey;
+
 import org.haggle.DataObject;
 import org.haggle.DataObject.DataObjectException;
 
@@ -23,6 +27,8 @@ public class MicropublisherView extends Activity {
 	private MessageAdapter messageAdpt = null;
 	private Micropublisher mp = null;
 	private boolean shouldRegisterWithHaggle = true;
+	private PublicKey publicKey = null;
+	private PrivateKey privateKey = null;
 	
 	/** Called when the activity is first created. */
 	@Override
@@ -38,6 +44,13 @@ public class MicropublisherView extends Activity {
         messageAdpt = new MessageAdapter(this);
         messageList.setAdapter(messageAdpt);
         registerForContextMenu(messageList);
+        
+        KeyPair keys = Cryptography.initKeys();
+        publicKey = keys.getPublic();
+        privateKey = keys.getPrivate();
+        
+        String filepath = ContentParser.createFile("message", "signature");
+        ContentParser.parseContent(filepath);
     }
 	
 	@Override
@@ -167,8 +180,11 @@ public class MicropublisherView extends Activity {
 		Log.d(Micropublisher.LOG_TAG, "message is: " + message);
 		
 		try {
-	        DataObject dObj = new DataObject(message.getBytes());
+			String signature = Cryptography.generateSignature(privateKey, message);
+			String contentFilepath = ContentParser.createFile(message, signature);
+			DataObject dObj = new DataObject(contentFilepath);
 	        dObj.addAttribute("Message", "news");
+	        Log.d(Micropublisher.LOG_TAG, "data object: " + dObj);
 	        mp.getHaggleHandle().publishDataObject(dObj);
 	        dObj.dispose();
 		} catch (DataObjectException e) {
@@ -189,7 +205,7 @@ public class MicropublisherView extends Activity {
 			switch(type) {
 			case org.haggle.EventHandler.EVENT_NEW_DATAOBJECT:
 				Log.d(Micropublisher.LOG_TAG, "Event new data object");
-				messageAdpt.updateMessages(dObj);
+				messageAdpt.updateMessages(dObj, publicKey);
 				break;
 			}
 			Log.d(Micropublisher.LOG_TAG, "data updater done");

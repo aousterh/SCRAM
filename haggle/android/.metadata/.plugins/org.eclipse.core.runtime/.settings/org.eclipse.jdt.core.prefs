@@ -1,4 +1,4 @@
-#Sun Nov 27 00:54:25 EST 2011
+#Fri Dec 09 20:41:53 EST 2011
 org.eclipse.jdt.core.codeComplete.fieldSuffixes=
 org.eclipse.jdt.core.codeComplete.localSuffixes=
 org.eclipse.jdt.core.compiler.compliance=1.5
@@ -6,6 +6,7 @@ org.eclipse.jdt.core.codeComplete.localPrefixes=
 org.eclipse.jdt.core.compiler.codegen.inlineJsrBytecode=enabled
 org.eclipse.jdt.core.codeComplete.staticFieldPrefixes=
 eclipse.preferences.version=1
+org.eclipse.jdt.core.userLibrary.Android\ 2.2=<?xml version\="1.0" encoding\="UTF-8"?>\n<userlibrary systemlibrary\="false" version\="2">\n\t<archive path\="/Applications/android-sdk-mac_x86/platforms/android-8/android.jar"/>\n</userlibrary>\n
 org.eclipse.jdt.core.codeComplete.staticFinalFieldPrefixes=
 org.eclipse.jdt.core.codeComplete.fieldPrefixes=
 org.eclipse.jdt.core.codeComplete.argumentSuffixes=

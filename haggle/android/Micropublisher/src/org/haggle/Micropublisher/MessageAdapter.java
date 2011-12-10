@@ -5,9 +5,11 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.security.PublicKey;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import org.haggle.Attribute;
 import org.haggle.DataObject;
 
 import android.content.Context;
@@ -59,8 +61,7 @@ class MessageAdapter extends BaseAdapter implements ListAdapter {
 		return dObj;
 	}
 	
-	public synchronized void updateMessages(DataObject dObj) {
-		String message;
+	public synchronized void updateMessages(DataObject dObj, PublicKey publicKey) {
 	
 		Log.d(Micropublisher.LOG_TAG, "data object: " + dObj);
 		
@@ -70,11 +71,20 @@ class MessageAdapter extends BaseAdapter implements ListAdapter {
 			in = new FileInputStream(dataFile);
 			byte[] buffer = new byte[Micropublisher.MESSAGE_LENGTH_IN_BYTES];
 			int bytes = in.read(buffer);
-			message = new String(buffer, 0, bytes);
-			Log.d(Micropublisher.LOG_TAG, "received message: " + message);
-
-			messages.put(dObj, message);
-			dataObjects.add(0, dObj);
+			int messageLength = bytes - Cryptography.SIGNATURE_LENGTH;
+			Log.d(Micropublisher.LOG_TAG, "message length: " + messageLength);
+			if (messageLength > 0) {
+				String message = new String(buffer, 0, messageLength);
+				String signature = new String(buffer, messageLength, Cryptography.SIGNATURE_LENGTH);
+				Log.d(Micropublisher.LOG_TAG, "received message: " + message);
+				
+				Log.d(Micropublisher.LOG_TAG, "signature: " + signature);
+				if (Cryptography.verifySignature(publicKey, message, signature)) {
+					messages.put(dObj, message);
+					dataObjects.add(0, dObj);
+					Log.d(Micropublisher.LOG_TAG, "Signature verified!!");
+				}
+			}
 		} catch (FileNotFoundException e) {
 			Log.d(Micropublisher.LOG_TAG, "File not found");
 		} catch (IOException e) {

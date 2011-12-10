@@ -1,4 +1,4 @@
-	package org.haggle.PhotoShare;
+package org.haggle.PhotoShare;
 
 import android.app.Activity;
 import android.graphics.Bitmap;
