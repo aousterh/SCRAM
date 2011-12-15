@@ -10,12 +10,20 @@
             android:label="@string/app_name"
             android:name=".MicropublisherView"
             android:screenOrientation="portrait" >
-            <intent-filter >
+            <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+           </intent-filter>
         </activity>
         <activity android:name=".PublishView"/>
+        <service android:name=".UserDataService" >
+            <intent-filter>
+                <action android:name="edu.pu.ao.MiniApp.KEYS"/>
+                <action android:name="edu.pu.ao.MiniApp.USER_DATA"/>
+                <action android:name="edu.pu.mf.iw.ProjectOne.ACTION_KEYS"/>
+                <action android:name="edu.pu.mf.iw.ProjectOne.ACTION_NODE_COMMIT"/>
+            </intent-filter>
+        </service>
     </application>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
   	<uses-permission android:name="android.permission.INTERNET" />

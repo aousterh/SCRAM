@@ -7,6 +7,7 @@ import org.haggle.LaunchCallback;
 import org.haggle.Node;
 
 import android.app.Application;
+import android.content.Intent;
 import android.util.Log;
 
 public class Micropublisher extends Application implements org.haggle.EventHandler {
@@ -21,12 +22,18 @@ public class Micropublisher extends Application implements org.haggle.EventHandl
 	static final int MESSAGE_LENGTH_IN_BYTES = 140;
 	
 	private MicropublisherView mv = null;
-	
 	private org.haggle.Handle hh = null;
+	private String publicKeyString = null;
+	private String privateKeyString = null;
+	private boolean keysSet = false;
 	
 	@Override
     public void onCreate() {
         super.onCreate();
+        
+        // start data service
+        Intent intent = new Intent(this, UserDataService.class);
+        startService(intent);
         Log.d(Micropublisher.LOG_TAG, "Micropublisher:onCreate()");
     }
 	
@@ -37,6 +44,24 @@ public class Micropublisher extends Application implements org.haggle.EventHandl
 	public void setMicropublisherView(MicropublisherView mv) {
 		Log.d(Micropublisher.LOG_TAG, "Micropublisher: Setting pv");
 		this.mv = mv;
+	}
+	
+	public void setKeys(String publicKeyString, String privateKeyString) {
+		this.publicKeyString = publicKeyString;
+		this.privateKeyString = privateKeyString;
+		this.keysSet = true;
+	}
+	
+	public boolean keysSet() {
+		return keysSet;
+	}
+	
+	public String getPublicKeyString() {
+		return publicKeyString;
+	}
+	
+	public String getPrivateKeyString() {
+		return privateKeyString;
 	}
 	
 	public int initHaggle() {

@@ -1,18 +1,12 @@
 package org.haggle.Micropublisher;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.security.PublicKey;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import org.haggle.Attribute;
 import org.haggle.DataObject;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,22 +17,23 @@ import android.widget.TextView;
 
 class MessageAdapter extends BaseAdapter implements ListAdapter {
 	private Context mContext;
-	private final HashMap<DataObject,String> messages = new HashMap<DataObject,String>();
+	private final HashMap<DataObject,MessageData> data = new HashMap<DataObject,MessageData>();
 	private final ArrayList<DataObject> dataObjects = new ArrayList<DataObject>();
-
+	
 	public MessageAdapter(Context mContext) {
 		this.mContext = mContext;
 		Log.d(Micropublisher.LOG_TAG, "MessageAdapter contructor");
 	}
+	
 	public int getCount() {
-		if (messages.size() == 0)
+		if (data.size() == 0)
 			return 1;
 		else
-			return messages.size();
+			return data.size();
 	}
 
 	public Object getItem(int position) {
-		return messages.get(dataObjects.get(position));
+		return data.get(dataObjects.get(position));
 	}
 
 	public long getItemId(int position) {
@@ -53,7 +48,7 @@ class MessageAdapter extends BaseAdapter implements ListAdapter {
 		
 		dataObjects.remove(position);
 		
-		if (messages.remove(dObj) == null)
+		if (data.remove(dObj) == null)
 			return null;
 		
 		notifyDataSetChanged();
@@ -61,42 +56,9 @@ class MessageAdapter extends BaseAdapter implements ListAdapter {
 		return dObj;
 	}
 	
-	public synchronized void updateMessages(DataObject dObj, PublicKey publicKey) {
-	
-		Log.d(Micropublisher.LOG_TAG, "data object: " + dObj);
-		
-		File dataFile = new File(dObj.getFilePath());
-		InputStream in = null;
-		try {
-			in = new FileInputStream(dataFile);
-			byte[] buffer = new byte[Micropublisher.MESSAGE_LENGTH_IN_BYTES];
-			int bytes = in.read(buffer);
-			int messageLength = bytes - Cryptography.SIGNATURE_LENGTH;
-			Log.d(Micropublisher.LOG_TAG, "message length: " + messageLength);
-			if (messageLength > 0) {
-				String message = new String(buffer, 0, messageLength);
-				String signature = new String(buffer, messageLength, Cryptography.SIGNATURE_LENGTH);
-				Log.d(Micropublisher.LOG_TAG, "received message: " + message);
-				
-				Log.d(Micropublisher.LOG_TAG, "signature: " + signature);
-				if (Cryptography.verifySignature(publicKey, message, signature)) {
-					messages.put(dObj, message);
-					dataObjects.add(0, dObj);
-					Log.d(Micropublisher.LOG_TAG, "Signature verified!!");
-				}
-			}
-		} catch (FileNotFoundException e) {
-			Log.d(Micropublisher.LOG_TAG, "File not found");
-		} catch (IOException e) {
-			Log.d(Micropublisher.LOG_TAG, "Problem reading");
-		} finally {
-			if (in != null)
-				try {
-					in.close();
-				} catch (IOException e) {
-					Log.d(Micropublisher.LOG_TAG, "io exception");
-				}	
-		}
+	public synchronized void updateMessages(DataObject dObj, MessageData messageData) {
+		data.put(dObj, messageData);
+		dataObjects.add(0, dObj);
 
 		notifyDataSetChanged();
 	}
@@ -110,21 +72,62 @@ class MessageAdapter extends BaseAdapter implements ListAdapter {
     }
     
 	public View getView(int position, View convertView, ViewGroup parent) {    		
-		TextView tv;
+		View view = convertView;
 		
-		if (convertView == null) {
-            tv = (TextView) LayoutInflater.from(mContext).inflate(R.layout.message_list_item, parent, false);
-        } else {
-            tv = (TextView) convertView;
-        }
-
-		if (messages.size() == 0) {
-			tv.setText("none");
-
-		} else {
-			String message = (String) getItem(position);
-			tv.setText(message);
+		if (data.size() == 0) {
+			view = LayoutInflater.from(mContext).inflate(R.layout.empty_message_list_item, parent, false);
+			TextView text = (TextView) view.findViewById(R.id.text_item);
+			text.setText("none");
+			return view;
 		}
-		return tv;
+		
+		ViewHolder viewHolder;
+		
+		if (view == null || view.getTag() == null) {
+            view = LayoutInflater.from(mContext).inflate(R.layout.message_list_item, parent, false);
+            viewHolder = new ViewHolder();
+            viewHolder.message = (TextView) view.findViewById(R.id.message_item);
+            viewHolder.name = (TextView) view.findViewById(R.id.name_item);
+            view.setTag(viewHolder);
+        } else {
+        	viewHolder = (ViewHolder) view.getTag();
+        }
+		
+		MessageData messageData = (MessageData) getItem(position);
+		
+		if (messageData != null) {
+			viewHolder.message.setText(messageData.getMessage());
+			
+			switch (messageData.getStatus()) {
+				case MessageData.STATUS_FORGERY:
+					viewHolder.name.setText("forged");
+					viewHolder.name.setTextColor(Color.RED);
+					break;
+				case MessageData.STATUS_FROM_ME:
+					viewHolder.name.setText("me");
+					viewHolder.name.setTextColor(Color.CYAN);
+					break;
+				case MessageData.STATUS_UNVERIFIED:
+					viewHolder.name.setText("unverified");
+					viewHolder.name.setTextColor(Color.YELLOW);
+					break;
+				case MessageData.STATUS_VERIFIED:
+					String name = messageData.getName();
+					if (name != null)
+						viewHolder.name.setText(name);
+					else
+						viewHolder.name.setText("unknown");
+					viewHolder.name.setTextColor(Color.GREEN);
+					break;
+			}
+		}
+		
+		return view;
 	}
+	
+	static class ViewHolder {
+		private TextView message;
+		private TextView name;
+	}
+	
 }

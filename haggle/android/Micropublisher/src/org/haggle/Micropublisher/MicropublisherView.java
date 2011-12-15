@@ -1,14 +1,12 @@
 package org.haggle.Micropublisher;
 
-import java.security.KeyPair;
-import java.security.PrivateKey;
-import java.security.PublicKey;
-
 import org.haggle.DataObject;
 import org.haggle.DataObject.DataObjectException;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.ContextMenu;
@@ -19,6 +17,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.ListView;
+import android.widget.Toast;
 
 public class MicropublisherView extends Activity {
 	public static final int MENU_PUBLISH  = 1;
@@ -27,8 +26,8 @@ public class MicropublisherView extends Activity {
 	private MessageAdapter messageAdpt = null;
 	private Micropublisher mp = null;
 	private boolean shouldRegisterWithHaggle = true;
-	private PublicKey publicKey = null;
-	private PrivateKey privateKey = null;
+	private Context context = this;
+	private UserDbAdapter db;
 	
 	/** Called when the activity is first created. */
 	@Override
@@ -40,18 +39,13 @@ public class MicropublisherView extends Activity {
         mp = (Micropublisher) getApplication();
         mp.setMicropublisherView(this);
         
-        ListView messageList = (ListView) findViewById(R.id.message_list);
+        ListView messageList = (ListView) findViewById(R.id.received_message_list);
+        Log.d(Micropublisher.LOG_TAG, "messageList: " + messageList);
         messageAdpt = new MessageAdapter(this);
         messageList.setAdapter(messageAdpt);
         registerForContextMenu(messageList);
         
-        KeyPair keys = Cryptography.initKeys();
-        publicKey = keys.getPublic();
-        privateKey = keys.getPrivate();
-        
-        String filepath = ContentParser.createFile("message", "signature");
-        ContentParser.parseContent(filepath);
-    }
+	}
 	
 	@Override
     public void onRestart() {
@@ -80,20 +74,25 @@ public class MicropublisherView extends Activity {
     	super.onResume();
     	Log.d(Micropublisher.LOG_TAG, "Micropublisher:onResume()");
 	}
+	
 	@Override
 	protected void onPause() {
     	super.onPause();
     	Log.d(Micropublisher.LOG_TAG, "Micropublisher:onPause()");
 
  	}
+	
     @Override
     protected void onStop() {
     	super.onStop();
     	Log.d(Micropublisher.LOG_TAG, "Micropublisher:onStop()");
     }
+    
     @Override
     protected void onDestroy() {
     	super.onDestroy();
+    	if (db != null && db.isOpen())
+    		db.close();
     	Log.d(Micropublisher.LOG_TAG, "Micropublisher:onDestroy()");
     }
 	
@@ -111,10 +110,17 @@ public class MicropublisherView extends Activity {
     	final Intent intent = new Intent();
     	
     	switch (item.getItemId()) {
-	    	case MENU_PUBLISH:
-	    		intent.setClass(getApplicationContext(), PublishView.class);
-	        	this.startActivityForResult(intent, Micropublisher.PUBLISH_MESSAGE_REQUEST);
-	    		return true;
+	    	case MENU_PUBLISH: {
+	    		if (mp.keysSet()) {
+		    		intent.setClass(getApplicationContext(), PublishView.class);
+		        	this.startActivityForResult(intent, Micropublisher.PUBLISH_MESSAGE_REQUEST);
+		    		return true;
+	    		} else {
+	    			Toast newToast = Toast.makeText(this, "don't have keys yet", Toast.LENGTH_SHORT);
+	    			newToast.show();
+	    		}
+	    		break;
+    		}
 	    	case MENU_SHUTDOWN_HAGGLE:
 	    		shouldRegisterWithHaggle = true;
 	    		mp.shutdownHaggle();
@@ -180,8 +186,10 @@ public class MicropublisherView extends Activity {
 		Log.d(Micropublisher.LOG_TAG, "message is: " + message);
 		
 		try {
-			String signature = Cryptography.generateSignature(privateKey, message);
-			String contentFilepath = ContentParser.createFile(message, signature);
+			String signature = Cryptography.generateSignature(mp.getPrivateKeyString(), message);
+			String uuid = Cryptography.getUuidFromPublicKey(mp.getPublicKeyString());
+			Log.d(Micropublisher.LOG_TAG, "UUID to publish: " + uuid);
+			String contentFilepath = ContentParser.createFile(message, uuid, signature);
 			DataObject dObj = new DataObject(contentFilepath);
 	        dObj.addAttribute("Message", "news");
 	        Log.d(Micropublisher.LOG_TAG, "data object: " + dObj);
@@ -200,15 +208,72 @@ public class MicropublisherView extends Activity {
 			this.type = org.haggle.EventHandler.EVENT_NEW_DATAOBJECT;
 			this.dObj = dObj;
 		}
+		
 		public void run() {
 			Log.d(Micropublisher.LOG_TAG, "Running data updater");
 			switch(type) {
 			case org.haggle.EventHandler.EVENT_NEW_DATAOBJECT:
-				Log.d(Micropublisher.LOG_TAG, "Event new data object");
-				messageAdpt.updateMessages(dObj, publicKey);
+				MessageData messageData = handleEventNewDataObject(dObj);
+				if (messageData != null)
+					messageAdpt.updateMessages(dObj, messageData);
 				break;
 			}
 			Log.d(Micropublisher.LOG_TAG, "data updater done");
 		}
+		
+		public MessageData handleEventNewDataObject(DataObject dObj) {
+			String pubKeyString = null;
+			Log.d(Micropublisher.LOG_TAG, "Event new data object");
+			MessageData messageData = null;
+			
+			// parse data object's content
+			ContentParser cp = new ContentParser(dObj.getFilePath());
+			String message = cp.getText("message");
+			String signature = cp.getText("signature");
+			String uuid = cp.getText("uuid");
+			Log.e(Micropublisher.LOG_TAG, "received UUID: " + uuid);
+			Log.e(Micropublisher.LOG_TAG, "my uuid: " + Cryptography.getUuidFromPublicKey(mp.getPublicKeyString()));
+			
+			messageData = new MessageData(message);
+			
+			
+			// retrieve the corresponding public key
+	        UserDbAdapter db = new UserDbAdapter(context);
+	        db.open();
+	        Cursor cursor = db.selectEntryById(uuid);
+	        Log.d(Micropublisher.LOG_TAG, "searching by UUID: " + uuid);
+	        cursor.moveToFirst();
+	        String name = null;
+	        Log.d(Micropublisher.LOG_TAG, "cursor count: " + cursor.getCount());
+	        if (uuid.equals(Cryptography.getUuidFromPublicKey(mp.getPublicKeyString()))) {
+	        	// my uuid, verify signature
+	        	
+	        	if (Cryptography.verifySignature(mp.getPublicKeyString(), message, signature)) {
+		        	messageData.setStatus(MessageData.STATUS_FROM_ME);
+	        	} else {
+					messageData.setStatus(MessageData.STATUS_FORGERY);
+				}  	
+	        } else if (cursor.getCount() == 1) {
+	        	// trusted node's uuid, verify signature
+	        	
+	        	pubKeyString = cursor.getString(cursor.getColumnIndex(UserDbAdapter.KEY_PUBLICKEY));
+	        	if (Cryptography.verifySignature(pubKeyString, message, signature)) {
+	        		name = cursor.getString(cursor.getColumnIndex(UserDbAdapter.KEY_NAME));
+					messageData.setName(name);
+					messageData.setStatus(MessageData.STATUS_VERIFIED);
+				} else {
+					messageData.setStatus(MessageData.STATUS_FORGERY);
+				}  
+	        } else {
+	        	// unknown uuid
+	        	messageData.setStatus(MessageData.STATUS_UNVERIFIED);
+	        }
+
+	        cursor.close();
+			db.close();
+			
+			return messageData;
+		}
 	}
+	
 }

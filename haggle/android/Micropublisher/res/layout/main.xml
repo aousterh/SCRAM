@@ -7,12 +7,13 @@
     <TextView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="@string/messages" />
-    <ListView android:id="@+id/message_list"
+        android:text="@string/received_messages" />
+    <ListView android:id="@+id/received_message_list"
     	android:layout_width="fill_parent"
     	android:layout_height="wrap_content"
     	android:divider="#eeeeee"
     	android:dividerHeight="1px"
     	android:choiceMode="singleChoice"/>
+
 
 </LinearLayout>

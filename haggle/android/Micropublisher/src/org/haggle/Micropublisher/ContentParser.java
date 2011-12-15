@@ -8,6 +8,7 @@
  * <?xml version="1.0" encoding="UTF-8"?>
  * <content>
  *     <message> MESSAGE_HERE </message>
+ *     <uuid> UUID_HERE </uuid>
  *     <signature> SIGNATURE_HERE </signature>
  * </content>
  * 
@@ -20,6 +21,7 @@
 package org.haggle.Micropublisher;
 
 import java.io.File;
+import java.util.Hashtable;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -38,30 +40,32 @@ import android.util.Log;
 
 public class ContentParser {
 	
+	private Hashtable<String, String> parsedData = new Hashtable<String, String>();
 	
-	public static void parseContent(String filepath) {
+	public ContentParser(String filepath) {
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-		Log.d(Micropublisher.LOG_TAG, "parsing!!");
 		try {
 			DocumentBuilder builder = factory.newDocumentBuilder();
 			Document document = builder.parse(new File(filepath));
-			Log.d(Micropublisher.LOG_TAG, "doc: " + document);
 			Element root = document.getDocumentElement();
 			NodeList nodes = root.getChildNodes();
-			Log.d(Micropublisher.LOG_TAG, "num nodes: " + nodes.getLength());
 			for (int i = 0; i < nodes.getLength(); i++) {
 				Node node = nodes.item(i);
-				Log.d(Micropublisher.LOG_TAG, node.getNodeName() + " " + node.getTextContent());
-			}
-										    
+				if (parsedData.containsKey(node.getNodeName())) {
+					Log.d(Micropublisher.LOG_TAG, "invalid content");
+				} else
+					parsedData.put(node.getNodeName(), node.getTextContent());
+			}							    
 		} catch (Exception e) {
 			Log.d(Micropublisher.LOG_TAG, "exception: " + e.getMessage());
 		}
-
 	}
 	
-	public static String createFile(String message, String signature) {
-		Log.d(Micropublisher.LOG_TAG, "creating!!");
+	public String getText(String nodeName) {
+		return parsedData.get(nodeName);
+	}
+	
+	public static String createFile(String message, String uuid, String signature) {
 		String filepath = null;
 		
 		try {
@@ -79,6 +83,10 @@ public class ContentParser {
 			rootElement.appendChild(messageElement);
 			messageElement.appendChild(document.createTextNode(message));
 			
+			Element uuidElement = document.createElement("uuid");
+			rootElement.appendChild(uuidElement);
+			uuidElement.appendChild(document.createTextNode(uuid));
+			
 			Element signatureElement = document.createElement("signature");
 			rootElement.appendChild(signatureElement);
 			signatureElement.appendChild(document.createTextNode(signature));
@@ -90,17 +98,16 @@ public class ContentParser {
 			
 			// create a file and write to it
 			File dir = new File(Environment.getExternalStorageDirectory() + "/Micropublisher");
+			if (!dir.mkdirs()) {
+    			Log.d(Micropublisher.LOG_TAG, "Could not create directory " + dir);
+    		}
     		String filename = "micropublisher-" + System.currentTimeMillis();
     		filepath = dir + "/" + filename;
     		File generatedFile = new File(filepath);
 			StreamResult result = new StreamResult(generatedFile);
 			transformer.transform(source, result);
-			
-			Log.d(Micropublisher.LOG_TAG, "survived");
-			
-			
 		} catch (Exception e) {
-			Log.d(Micropublisher.LOG_TAG, "error generating XML");
+			Log.d(Micropublisher.LOG_TAG, "error generating XML: " + e.getMessage());
 		}
 		return filepath;
 	}
